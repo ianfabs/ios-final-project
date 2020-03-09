@@ -82,20 +82,6 @@ class TodoDB {
 //    }
 }
 
-enum Area : String, Codable {
-    case todo = "todo"
-    case in_progress = "in-progress"
-    case done = "done"
-}
 
-class TodoItemView: UIView {
-    
-}
 
-struct Item: Codable {
-    var title: String
-    var details: String
-    var area: String
-    var tags: String
-    var due: Date?
-}
+

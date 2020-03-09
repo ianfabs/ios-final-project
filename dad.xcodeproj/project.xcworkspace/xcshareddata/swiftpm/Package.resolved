@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "MultilineTextField",
+        "repositoryURL": "https://github.com/rlaguilar/MultilineTextField.git",
+        "state": {
+          "branch": null,
+          "revision": "9656eb1aaf13ec355f0d2b7fe3d2b5ffe2c2b318",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "SQLite.swift",
         "repositoryURL": "https://github.com/stephencelis/SQLite.swift",
         "state": {

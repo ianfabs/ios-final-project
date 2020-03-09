@@ -10,21 +10,36 @@ import UIKit
 import SQLite
 
 class TodoViewController : UITableViewController {
-    let store = try! TodoDB();
+    var store = TaskStore();
+    var tasks: [Task]!;
     
-    var itemsTodo: [Item] = [];
+    required init?(coder: NSCoder) {
+        super.init(coder: coder);
+        
+        loadTasks()
+    }
     
-    override func viewDidLoad() {
-        // Load items
-        itemsTodo = self.loadItems();
-//        for todo in try! store.db.prepare(store.todos) {
-//            print("id: \(todo[store.id]), title: \(todo[store.title]), details: \(todo[store.details])")
-//            // id: 1, name: Optional("Alice"), email: alice@mac.com
-//        }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        loadTasks()
+        if segue.identifier == "EditorSegue" {
+            let editorVC = segue.destination as! TaskEditorViewController;
+            
+            if let selectedTaskCell = sender as? ItemTableViewCell {
+                let indexPath = tableView.indexPath(for: selectedTaskCell)!;
+                let selectedTask = self.tasks[indexPath.row];
+                editorVC.task = selectedTask;
+                editorVC.store = self.store;
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        itemsTodo = self.loadItems();
+        let tableView = self.view as! UITableView;
+        tableView.reloadData();
+    }
+    
+    override func viewDidLoad() {
+        loadTasks()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -32,11 +47,11 @@ class TodoViewController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemsTodo.count
+        return store.tasks.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        itemsTodo = self.loadItems();
+        loadTasks()
         // Table view cells are reused and should be dequeued using a cell identifier.
         let cellIdentifier = "ItemTableViewCell"
         
@@ -44,30 +59,32 @@ class TodoViewController : UITableViewController {
             fatalError("The dequeued cell is not an instance of \(cellIdentifier).")
         }
         
-        // Fetches the appropriate meal for the data source layout.
-        let item = itemsTodo[indexPath.row]
+        // Get corresponding item
+        let item = store.get(.todo).decode(db: store.db)[indexPath.row];
         
-        cell.TitleLabel.text = item.title
-        cell.TagsLabel.text = item.tags
-        cell.DetailsLabel.text = item.details
-//        cell.DetailsLabel.numberOfLines = 0;
-//        cell.DetailsLabel.sizeToFit()
-        let formatter = DateFormatter()
+        // Set values for cell
+        cell.TitleLabel.text = item.title;
+        cell.TagsLabel.text = item.tags;
+        cell.DetailsLabel.text = item.details;
+        let formatter = DateFormatter();
         // initially set the format based on your datepicker date / server String
-        formatter.dateFormat = "MMMM dd, yyyy HH:mm:ss"
+        formatter.dateFormat = "🗓 MMMM dd, yyyy ⏰ HH:mm a";
         if (item.due == nil) {
-            cell.DueByLabel.text = "No due date"
+            cell.DueByLabel.text = "No due date";
         } else {
-            cell.DueByLabel.text = formatter.string(from: item.due!)
+            cell.DueByLabel.text = formatter.string(from: item.due!);
         }
         
         return cell
     }
     
-    func loadItems() -> [Item] {
-        return try! self.store.db.prepare(self.store.get(area: .todo)).map { row in
-            return try row.decode()
-        }
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        performSegue(withIdentifier: "EditorSegue", sender: self)
+//    }
+    
+    func loadTasks() {
+        tasks = store.get(.todo).decode(db: store.db)
     }
+    
     
 }

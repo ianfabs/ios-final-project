@@ -25,6 +25,8 @@
 		37810FE424144FE700249A1B /* TagsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FE324144FE700249A1B /* TagsStackView.swift */; };
 		37810FE62414754E00249A1B /* TaskEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FE52414754E00249A1B /* TaskEditorViewController.swift */; };
 		37810FE8241479E800249A1B /* TagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FE7241479E800249A1B /* TagCollectionViewCell.swift */; };
+		37E788C32415B7B400B289AA /* TaskStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E788C22415B7B400B289AA /* TaskStore.swift */; };
+		37E788C62415F04500B289AA /* MultilineTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 37E788C52415F04500B289AA /* MultilineTextField */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +70,7 @@
 		37810FE324144FE700249A1B /* TagsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsStackView.swift; sourceTree = "<group>"; };
 		37810FE52414754E00249A1B /* TaskEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditorViewController.swift; sourceTree = "<group>"; };
 		37810FE7241479E800249A1B /* TagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCollectionViewCell.swift; sourceTree = "<group>"; };
+		37E788C22415B7B400B289AA /* TaskStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37E788C62415F04500B289AA /* MultilineTextField in Frameworks */,
 				37810FD524142BA400249A1B /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -134,6 +138,7 @@
 				37810FDE2414471300249A1B /* ItemTableViewCell.swift */,
 				37810FE52414754E00249A1B /* TaskEditorViewController.swift */,
 				37810FE7241479E800249A1B /* TagCollectionViewCell.swift */,
+				37E788C22415B7B400B289AA /* TaskStore.swift */,
 			);
 			path = dad;
 			sourceTree = "<group>";
@@ -183,6 +188,7 @@
 			name = dad;
 			packageProductDependencies = (
 				37810FD424142BA400249A1B /* SQLite */,
+				37E788C52415F04500B289AA /* MultilineTextField */,
 			);
 			productName = dad;
 			productReference = 37810FA02414298400249A1B /* dad.app */;
@@ -230,6 +236,9 @@
 		37810F982414298400249A1B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					ShowEditor,
+				);
 				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Fabricatore, Ian T";
@@ -258,6 +267,7 @@
 			mainGroup = 37810F972414298400249A1B;
 			packageReferences = (
 				37810FD324142BA400249A1B /* XCRemoteSwiftPackageReference "SQLite" */,
+				37E788C42415F04500B289AA /* XCRemoteSwiftPackageReference "MultilineTextField" */,
 			);
 			productRefGroup = 37810FA12414298400249A1B /* Products */;
 			projectDirPath = "";
@@ -305,6 +315,7 @@
 			files = (
 				37810FD924142C2900249A1B /* TodoViewController.swift in Sources */,
 				37810FD724142BD600249A1B /* TabBarViewController.swift in Sources */,
+				37E788C32415B7B400B289AA /* TaskStore.swift in Sources */,
 				37810FE424144FE700249A1B /* TagsStackView.swift in Sources */,
 				37810FA82414298400249A1B /* ViewController.swift in Sources */,
 				37810FE62414754E00249A1B /* TaskEditorViewController.swift in Sources */,
@@ -646,6 +657,14 @@
 				version = 0.12.2;
 			};
 		};
+		37E788C42415F04500B289AA /* XCRemoteSwiftPackageReference "MultilineTextField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rlaguilar/MultilineTextField.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -653,6 +672,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 37810FD324142BA400249A1B /* XCRemoteSwiftPackageReference "SQLite" */;
 			productName = SQLite;
+		};
+		37E788C52415F04500B289AA /* MultilineTextField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 37E788C42415F04500B289AA /* XCRemoteSwiftPackageReference "MultilineTextField" */;
+			productName = MultilineTextField;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
