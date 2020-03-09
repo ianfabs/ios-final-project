@@ -18,7 +18,6 @@
 		37810FD524142BA400249A1B /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 37810FD424142BA400249A1B /* SQLite */; };
 		37810FD724142BD600249A1B /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FD624142BD600249A1B /* TabBarViewController.swift */; };
 		37810FD924142C2900249A1B /* TodoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FD824142C2900249A1B /* TodoViewController.swift */; };
-		37810FDB24142CE800249A1B /* TodoDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FDA24142CE800249A1B /* TodoDB.swift */; };
 		37810FDD24142D5200249A1B /* db.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 37810FDC24142D5200249A1B /* db.sqlite3 */; };
 		37810FDF2414471300249A1B /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FDE2414471300249A1B /* ItemTableViewCell.swift */; };
 		37810FE224144A4F00249A1B /* UITags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FE124144A4F00249A1B /* UITags.swift */; };
@@ -63,7 +62,6 @@
 		37810FC72414298600249A1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37810FD624142BD600249A1B /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		37810FD824142C2900249A1B /* TodoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoViewController.swift; sourceTree = "<group>"; };
-		37810FDA24142CE800249A1B /* TodoDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDB.swift; sourceTree = "<group>"; };
 		37810FDC24142D5200249A1B /* db.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = text; path = db.sqlite3; sourceTree = "<group>"; };
 		37810FDE2414471300249A1B /* ItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
 		37810FE124144A4F00249A1B /* UITags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITags.swift; sourceTree = "<group>"; };
@@ -133,7 +131,6 @@
 				37810FB12414298600249A1B /* Info.plist */,
 				37810FD624142BD600249A1B /* TabBarViewController.swift */,
 				37810FD824142C2900249A1B /* TodoViewController.swift */,
-				37810FDA24142CE800249A1B /* TodoDB.swift */,
 				37810FDC24142D5200249A1B /* db.sqlite3 */,
 				37810FDE2414471300249A1B /* ItemTableViewCell.swift */,
 				37810FE52414754E00249A1B /* TaskEditorViewController.swift */,
@@ -319,7 +316,6 @@
 				37810FE424144FE700249A1B /* TagsStackView.swift in Sources */,
 				37810FA82414298400249A1B /* ViewController.swift in Sources */,
 				37810FE62414754E00249A1B /* TaskEditorViewController.swift in Sources */,
-				37810FDB24142CE800249A1B /* TodoDB.swift in Sources */,
 				37810FA42414298400249A1B /* AppDelegate.swift in Sources */,
 				37810FDF2414471300249A1B /* ItemTableViewCell.swift in Sources */,
 				37810FA62414298400249A1B /* SceneDelegate.swift in Sources */,

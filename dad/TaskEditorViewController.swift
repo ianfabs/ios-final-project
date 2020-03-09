@@ -19,18 +19,27 @@ class TaskEditorViewController: UIViewController {
     @IBOutlet weak var tagCollection: UICollectionView!
     
     var store: TaskStore!
-    var task: Task!
+    var task: Task?
+    var type: EditorType = .update;
     
-    var currentTask : Task {
+    var currentTask : OTask {
         get {
-            return Task(
-                id: task.id,
+            return OTask(
                 title: titleInput.text!,
                 details: detailsInput.text!,
-                area: statusInput!.value.rawValue,
-                tags: "",
-                due: dueInput.date
+                area: statusInput!.value,
+                due: dueInput.date,
+                order: store.tasks.count
             )
+        }
+    }
+    
+    var areInputsValid: Bool {
+        get {
+            let titleIsValid = titleInput.text != nil || titleInput.text != "";
+            let detailIsValid = detailsInput.text != nil || detailsInput.text != "";
+            
+             return titleIsValid && detailIsValid;
         }
     }
     
@@ -42,6 +51,7 @@ class TaskEditorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        // Add border to text area
         detailsInput.layer.borderColor = UIColor.opaqueSeparator.cgColor;
         detailsInput.layer.borderWidth = 1
         detailsInput.layer.cornerRadius = 5;
@@ -52,18 +62,18 @@ class TaskEditorViewController: UIViewController {
             if let due = task.due {
                 dueInput.date = due;
             }
-            switch task.area {
-                case "todo":
-                    statusInput.selectedSegmentIndex = 0
-                case "in-progress":
-                    statusInput.selectedSegmentIndex = 1
-                case "done":
-                    statusInput.selectedSegmentIndex = 2
-                default:
-                    statusInput.selectedSegmentIndex = 0
-            }
-            
+            statusInput.value = Area(rawValue: task.area)!;
         }
+        
+        // Change labels based on type
+        if type == .create {
+            self.title = "New Task"
+            saveBtn.title = "Create"
+        } else {
+            saveBtn.title = "Save"
+            self.title = "Edit Task"
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -73,14 +83,37 @@ class TaskEditorViewController: UIViewController {
     
     
     @IBAction func savePressed(_ sender: UIBarButtonItem) {
+        if type == .update {
+            if let id = task?.id {
+                updateTask(id);
+            } else {
+                print("bad task id 👎")
+            }
+        } else if type == .create {
+            if self.areInputsValid {
+                newTask();
+            }
+        }
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func newTask() {
+        do {
+            let id = try store.add(task: currentTask)
+            print("Success! New Task ID => \(id)")
+        } catch let error {
+            print(error.localizedDescription);
+        }
+    }
+    
+    func updateTask(_ id: Int) {
         do {
             try store.db.run(
-                store.get(currentTask.id).update(currentTask)
+                store.get(task!.id).update(currentTask)
             );
         } catch let error {
             print(error.localizedDescription);
         }
-        self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -111,4 +144,8 @@ class UIStatusControl : UISegmentedControl {
             }
         }
     }
+}
+
+enum EditorType {
+    case create, update
 }

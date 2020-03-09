@@ -11,16 +11,28 @@ import SQLite
 
 class TodoViewController : UITableViewController {
     var store = TaskStore();
-    var tasks: [Task]!;
+    var tasks: [Task] {
+        get {
+            return store.tasks.sorted { (a, b) -> Bool in
+                return a.order > b.order;
+            }
+        }
+    }
+    
+    @IBOutlet weak var toggle: UIButton!
+    
+    var toggleImageConfig: UIImage.Configuration!;
     
     required init?(coder: NSCoder) {
         super.init(coder: coder);
-        
-        loadTasks()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        loadTasks()
+        let backItem = UIBarButtonItem()
+        backItem.title = "Cancel"
+        backItem.tintColor = .red
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backItem
+        
         if segue.identifier == "EditorSegue" {
             let editorVC = segue.destination as! TaskEditorViewController;
             
@@ -30,6 +42,10 @@ class TodoViewController : UITableViewController {
                 editorVC.task = selectedTask;
                 editorVC.store = self.store;
             }
+        } else if segue.identifier == "NewTask" {
+            let editorVC = segue.destination as! TaskEditorViewController;
+            editorVC.type = .create
+            editorVC.store = self.store
         }
     }
     
@@ -39,7 +55,10 @@ class TodoViewController : UITableViewController {
     }
     
     override func viewDidLoad() {
-        loadTasks()
+        setEditing(false, animated: false)
+        toggleImageConfig = (toggle.currentImage?.configuration)!
+        let tableView = self.view as! UITableView;
+        tableView.reloadData();
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -47,11 +66,10 @@ class TodoViewController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return store.tasks.count
+        return tasks.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        loadTasks()
         // Table view cells are reused and should be dequeued using a cell identifier.
         let cellIdentifier = "ItemTableViewCell"
         
@@ -60,8 +78,12 @@ class TodoViewController : UITableViewController {
         }
         
         // Get corresponding item
-        let item = store.get(.todo).decode(db: store.db)[indexPath.row];
-        
+        let item = tasks.filter { (t) -> Bool in
+            return t.order == indexPath.row
+        }[0];
+        cell.id = item.id;
+//        print("Table ID (\(indexPath.row)) SQL ID (\(item.id))")
+        print("Order ID (\(item.order))")
         // Set values for cell
         cell.TitleLabel.text = item.title;
 //        cell.TagsLabel.text = item.tags;
@@ -78,13 +100,43 @@ class TodoViewController : UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let deletedTask = tableView.cellForRow(at: indexPath) as! ItemTableViewCell;
+            try! store.remove(id: deletedTask.id)
+            tableView.deselectRow(at: indexPath, animated: true)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+        tableView.reloadData();
+    }
+    
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        performSegue(withIdentifier: "EditorSegue", sender: self)
 //    }
     
-    func loadTasks() {
-        tasks = store.get(.todo).decode(db: store.db)
+    override func tableView(_ tableView: UITableView,
+                            moveRowAt sourceIndexPath: IndexPath,
+                            to destinationIndexPath: IndexPath) {
+        // Update the model
+        store.move(from: sourceIndexPath.row, to: destinationIndexPath.row)
+        tableView.reloadData()
     }
     
+    
+    @IBAction func enableEditingTaskList(_ sender: UIButton, forEvent event: UIEvent) {
+        let on = UIImage.init(systemName: "rectangle.grid.1x2.fill", withConfiguration: toggleImageConfig);
+        let off = UIImage.init(systemName: "rectangle.grid.1x2", withConfiguration: toggleImageConfig);
+        
+        print("is editing => \(isEditing)")
+        if isEditing == true {
+            toggle.setImage(off, for: .normal)
+            setEditing(false, animated: true)
+        } else {
+            toggle.setImage(on, for: .normal)
+            setEditing(true, animated: true)
+        }
+        print("is editing => \(isEditing)")
+        tableView.reloadData();
+    }
     
 }

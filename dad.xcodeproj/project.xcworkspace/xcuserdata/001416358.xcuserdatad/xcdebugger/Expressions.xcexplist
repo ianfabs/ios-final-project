@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "TodoViewController.prepare(for:sender:):TodoViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(self.view as UITableView).isEditing">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TaskEditorViewController.newTask():TaskEditorViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.currentTask">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TodoViewController.enableEditingTaskList(_:forEvent:):TodoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TaskEditorViewController.currentTask.getter:TaskEditorViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.currentTask.due">
+            </PersistentString>
+            <PersistentString
+               value = "self.dueInput.date">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TaskEditorViewController.type.setter:TaskEditorViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TodoViewController.loadTasks():TodoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TodoViewController.viewWillAppear(_:):TodoViewController.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
