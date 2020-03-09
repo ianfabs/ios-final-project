@@ -64,7 +64,7 @@ class TodoViewController : UITableViewController {
         
         // Set values for cell
         cell.TitleLabel.text = item.title;
-        cell.TagsLabel.text = item.tags;
+//        cell.TagsLabel.text = item.tags;
         cell.DetailsLabel.text = item.details;
         let formatter = DateFormatter();
         // initially set the format based on your datepicker date / server String
