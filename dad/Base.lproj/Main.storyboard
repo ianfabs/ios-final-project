@@ -75,8 +75,20 @@
                                     <rect key="frame" x="0.0" y="-6" width="280" height="56"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </searchBar>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rlz-Nk-ZkX" userLabel="New Task">
-                                    <rect key="frame" x="362" y="0.0" width="52" height="44"/>
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0PA-eC-2t4" userLabel="Delete Task" colorLabel="IBBuiltInLabel-Red">
+                                    <rect key="frame" x="280" y="0.0" width="54" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="50" id="yXw-st-wg1"/>
+                                    </constraints>
+                                    <state key="normal" image="rectangle.grid.1x2" catalog="system">
+                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="28"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="enableEditingTaskList:forEvent:" destination="bMs-hZ-Kzm" eventType="touchUpInside" id="IOw-ey-PiZ"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rlz-Nk-ZkX" userLabel="New Task">
+                                    <rect key="frame" x="342" y="0.0" width="59" height="44"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="52" id="R64-pO-9kq"/>
                                     </constraints>
@@ -86,18 +98,6 @@
                                     </state>
                                     <connections>
                                         <segue destination="VaG-7T-NB7" kind="show" identifier="NewTask" id="rQM-Yz-o5P"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0PA-eC-2t4" userLabel="Delete Task" colorLabel="IBBuiltInLabel-Red">
-                                    <rect key="frame" x="304" y="0.0" width="50" height="44"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="50" id="yXw-st-wg1"/>
-                                    </constraints>
-                                    <state key="normal" image="rectangle.grid.1x2" catalog="system">
-                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="28"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="enableEditingTaskList:forEvent:" destination="bMs-hZ-Kzm" eventType="touchUpInside" id="IOw-ey-PiZ"/>
                                     </connections>
                                 </button>
                             </subviews>
