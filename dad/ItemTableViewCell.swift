@@ -10,10 +10,10 @@ import UIKit
 
 class ItemTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var TagsLabel: UILabel!
     @IBOutlet weak var TitleLabel: UILabel!
-    @IBOutlet weak var DetailsLabel: UITextView!
+    @IBOutlet weak var DetailsLabel: UILabel!
     @IBOutlet weak var DueByLabel: UILabel!
+    @IBOutlet weak var TagsLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
