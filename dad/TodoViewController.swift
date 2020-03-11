@@ -30,7 +30,14 @@ class TodoViewController : UITableViewController {
         super.init(coder: coder);
         
         print("All Todos 👉")
-        debugPrint(store.todos.decode(db: store.db)!.map{ $0.order })
+        if let tasks = store.get(1).decode(db: store.db) {
+            for task in tasks {
+                print("ID \(task.id)")
+                print("Order \(task.order)")
+            }
+        } else {
+            print("No tasks :-(")
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -58,57 +65,8 @@ class TodoViewController : UITableViewController {
         } else if segue.identifier == "NewTask" {
             let editorVC = segue.destination as! TaskEditorViewController;
             editorVC.type = .create
-            editorVC.store = self.store
+//            editorVC.store = self.store
             
-        // MARK: - Prepare for segue named "info" -
-        } else if segue.identifier == "info" {
-            let modal = segue.destination as! DebugViewController;
-            
-            if let button = sender as? UIButton {
-                if let cell_content = button.superview, let cell = cell_content.superview as? ItemTableViewCell {
-                    if let indexPath = tableView.indexPath(for: cell) {
-                        print("Debugging row #\(indexPath.row)")
-                        if let tasks = self.store.get(order: indexPath.row).decode(db: store.db) {
-                            store.db.trace { print($0) }
-                            let task = tasks[0];
-                            modal.idLabel.text = "\(task.id)"
-                            modal.titleLabel.text = task.title
-                            modal.detailsLabel.text = task.details
-                            let df = DateFormatter()
-                            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-                            if let ds = task.due {
-                                modal.dueLabel.text = df.string(from: ds)
-                            } else {
-                                modal.dueLabel.text = "No due date"
-                            }
-                            modal.tagsLabel.text = task.tags
-                            modal.orderLabel.text = String(task.order)
-                            modal.areaLabel.text = task.area
-                        } else if let tasks = self.store.get(cell.task.id).decode(db: store.db) {
-                            let task = tasks[0];
-                            modal.idLabel.text = String(task.id)
-                            modal.titleLabel.text = task.title
-                            modal.detailsLabel.text = task.details
-                            let df = DateFormatter()
-                            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-                            if let ds = task.due {
-                                modal.dueLabel.text = df.string(from: ds)
-                            } else {
-                                modal.dueLabel.text = "No due date"
-                            }
-                            modal.tagsLabel.text = task.tags
-                            modal.orderLabel.text = String(task.order)
-                            modal.areaLabel.text = task.area
-                        }
-                    }
-                    
-                } else {
-                    print("Cell broke!")
-                }
-                
-                debugPrint(sender.debugDescription)
-            }
-        // MARK: - 🤷‍♂️ -
         } else {
             debugPrint(SceneError.Segue, "Segue did not match any implemented segues")
         }
@@ -141,15 +99,12 @@ class TodoViewController : UITableViewController {
             fatalError("The dequeued cell is not an instance of \(cellIdentifier).")
         }
         
-        debugPrint("Row to insert task on => ", indexPath.row)
-        
-        
         // Get corresponding item
         if let items = store.get(order: indexPath.row).sort(store.order.asc).decode(db: store.db) {
             debugPrint("Number of Items =>", items.count)
             if items.count == 1 {
                 let item = items[0];
-//                debugPrint("Item => \n", item);
+                debugPrint("Inserting task #\(item.id) into table row #\(indexPath.row)")
                 cell.task = item;
             } else if items.count > 1 {
                 debugPrint(AppError.TooManyTasks)
@@ -170,6 +125,7 @@ class TodoViewController : UITableViewController {
             tableView.deselectRow(at: indexPath, animated: true)
             tableView.deleteRows(at: [indexPath], with: .fade)
             if deletedTask.task.id == indexPath.row {
+                //TODO: Make sure "self.count" works
                 if indexPath.row == 0 && self.count > 1 {
                     store.reorder()
                 }
@@ -192,7 +148,8 @@ class TodoViewController : UITableViewController {
         tableView.reloadData()
     }
     
-    
+    // MARK: - IBActions -
+    // MARK: toggle editing
     @IBAction func enableEditingTaskList(_ sender: UIButton, forEvent event: UIEvent) {
         let on = UIImage.init(systemName: "rectangle.grid.1x2.fill", withConfiguration: toggleImageConfig);
         let off = UIImage.init(systemName: "rectangle.grid.1x2", withConfiguration: toggleImageConfig);
@@ -208,5 +165,11 @@ class TodoViewController : UITableViewController {
         print("is editing => \(isEditing)")
         tableView.reloadData();
     }
+    
+    @IBAction func deleteAll(_ sender: UIBarButtonItem) {
+        try! store.db.run(store.todos.delete())
+        tableView.reloadData()
+    }
+    
     
 }

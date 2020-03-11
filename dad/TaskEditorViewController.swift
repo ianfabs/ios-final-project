@@ -18,7 +18,7 @@ class TaskEditorViewController: UIViewController {
     @IBOutlet weak var newTagInput: UITextField!
     @IBOutlet weak var tagCollection: UICollectionView!
     
-    var store: TaskStore!
+    var store: TaskStore = TaskStore()
     var task: Task?
     var type: EditorType = .update;
     
@@ -73,7 +73,6 @@ class TaskEditorViewController: UIViewController {
             saveBtn.title = "Save"
             self.title = "Edit Task"
         }
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -99,13 +98,29 @@ class TaskEditorViewController: UIViewController {
     
     func newTask() {
         do {
-            if let max = try! store.db.scalar(store.todos.select(store.order.max)) {
-                currentTask.order = max;
-            } else {
-                currentTask.order = store.count(store.todos) - 1
+//            if let max = try! store.db.scalar(store.todos.select(store.order.max)) {
+//                currentTask.order = max;
+//            } else {
+//                currentTask.order = store.count(store.todos)
+//            }
+            if let tasks = store.todos.decode(db: store.db) {
+                for task in tasks {
+                    print("Task #\(task.id), order #\(task.order)")
+                }
             }
-            let id = try store.add(task: currentTask)
-            print("Success! New Task ID => \(id)")
+            
+            
+            let id = try store.db.run(
+                store.todos.insert(
+                    store.title <- titleInput.text!,
+                    store.details <- detailsInput.text,
+                    store.order <- try! store.db.scalar(store.todos.count),
+                    store.area <- statusInput.value.rawValue,
+                    store.tags <- "",
+                    store.due <- dueInput.date
+                )
+            )
+            print("✅ Task #\(id) Created!")
         } catch let error {
             print(error.localizedDescription);
         }

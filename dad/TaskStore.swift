@@ -206,7 +206,6 @@ struct Task: Codable {
 }
 
 class OTask: Codable {
-    var id: Int?
     var title: String
     var details: String
     var area: String
@@ -219,7 +218,6 @@ class OTask: Codable {
         self.details = details
         self.area = area
         self.due = due
-        self.id = nil;
         self.tags = tags;
         self.order = order
     }
@@ -228,17 +226,6 @@ class OTask: Codable {
         self.title = title
         self.details = details
         self.area = area.rawValue
-        self.due = due
-        self.id = nil;
-        self.tags = tags;
-        self.order = order
-    }
-    
-    init(id: Int, title: String, details: String, area: String, tags: String = "", due: Date? = nil, order: Int) {
-        self.id = id;
-        self.title = title
-        self.details = details
-        self.area = area
         self.due = due
         self.tags = tags;
         self.order = order

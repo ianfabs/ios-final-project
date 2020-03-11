@@ -20,6 +20,9 @@
          contextName = "TaskEditorViewController.newTask():TaskEditorViewController.swift">
          <PersistentStrings>
             <PersistentString
+               value = "self.titleInput.text">
+            </PersistentString>
+            <PersistentString
                value = "self.currentTask">
             </PersistentString>
          </PersistentStrings>
@@ -53,10 +56,21 @@
          contextName = "TaskEditorViewController.type.setter:TaskEditorViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "TodoViewController.tableView(_:cellForRowAt:):TodoViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexPath.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "TodoViewController.loadTasks():TodoViewController.swift">
       </ContextState>
       <ContextState
          contextName = "TodoViewController.viewWillAppear(_:):TodoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DebugViewController.idLabel.getter:DebugViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>
