@@ -42,12 +42,12 @@
             </objects>
             <point key="canvasLocation" x="-217" y="-325"/>
         </scene>
-        <!--Debug View Controller-->
+        <!--Debug Task-->
         <scene sceneID="GNB-XP-FnX">
             <objects>
-                <viewController id="Phi-yC-3e2" customClass="DebugViewController" customModule="dad" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="Phi-yC-3e2" customClass="DebugViewController" customModule="dad" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vg0-3P-avz">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J6f-BU-NHF">
@@ -152,32 +152,22 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <gestureRecognizers/>
                         <viewLayoutGuide key="safeArea" id="6tM-Nt-ElV"/>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="WdX-Us-3aC" appends="YES" id="ZAf-6y-Oz9"/>
-                        </connections>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationItem key="navigationItem" title="Debug Task" id="rt4-E5-JX8"/>
                     <connections>
-                        <outlet property="Id" destination="q45-p3-9B8" id="n7g-rB-5i4"/>
-                        <outlet property="LDetails" destination="KDn-Hg-r23" id="xU4-Uu-gWO"/>
-                        <outlet property="LDue" destination="mIh-v5-EAW" id="NQu-bn-h9D"/>
-                        <outlet property="LID" destination="q45-p3-9B8" id="47s-2u-OZc"/>
-                        <outlet property="LId" destination="FsD-AF-Om6" id="q65-Yd-DOO"/>
-                        <outlet property="LTitle" destination="FsD-AF-Om6" id="bjs-6w-Tgz"/>
                         <outlet property="areaLabel" destination="dwh-jW-OJI" id="oQr-u5-T4P"/>
                         <outlet property="detailsLabel" destination="KDn-Hg-r23" id="kbR-Vp-abD"/>
                         <outlet property="dueLabel" destination="mIh-v5-EAW" id="czg-af-ww8"/>
-                        <outlet property="id" destination="q45-p3-9B8" id="Uc2-o9-jC2"/>
                         <outlet property="idLabel" destination="q45-p3-9B8" id="oEq-JA-uah"/>
                         <outlet property="orderLabel" destination="f7O-Vr-4PN" id="dBk-Qa-rCp"/>
                         <outlet property="tagsLabel" destination="X3B-ay-wTx" id="9ec-0F-1yk"/>
-                        <outlet property="title" destination="FsD-AF-Om6" id="Rwu-NO-2lq"/>
                         <outlet property="titleLabel" destination="FsD-AF-Om6" id="5Vc-Cn-hUU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PRi-9s-oJA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="WdX-Us-3aC"/>
             </objects>
-            <point key="canvasLocation" x="819" y="-1512"/>
+            <point key="canvasLocation" x="1414" y="-1528"/>
         </scene>
         <!--Todo Controller-->
         <scene sceneID="ild-mg-kt1">
@@ -274,7 +264,7 @@
                                             <rect key="frame" x="360" y="14" width="25" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <connections>
-                                                <segue destination="Phi-yC-3e2" kind="presentation" identifier="info" id="Ykw-pq-JoT"/>
+                                                <segue destination="Phi-yC-3e2" kind="show" identifier="info" id="ZPW-1q-QXk"/>
                                             </connections>
                                         </button>
                                     </subviews>

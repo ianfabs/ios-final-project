@@ -6,6 +6,12 @@
          contextName = "TodoViewController.prepare(for:sender:):TodoViewController.swift">
          <PersistentStrings>
             <PersistentString
+               value = "button.superview as UIView">
+            </PersistentString>
+            <PersistentString
+               value = "(UITableViewCellContentView)$R22">
+            </PersistentString>
+            <PersistentString
                value = "(self.view as UITableView).isEditing">
             </PersistentString>
          </PersistentStrings>

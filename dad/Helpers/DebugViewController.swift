@@ -27,5 +27,7 @@ class DebugViewController : UIViewController {
     
     
     
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
 }

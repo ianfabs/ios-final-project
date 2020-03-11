@@ -29,7 +29,7 @@ class TaskEditorViewController: UIViewController {
                 details: detailsInput.text!,
                 area: statusInput!.value,
                 due: dueInput.date,
-                order: try! store.db.scalar(store.todos.select(store.order.max))!
+                order: 0
             )
         }
     }
@@ -99,6 +99,11 @@ class TaskEditorViewController: UIViewController {
     
     func newTask() {
         do {
+            if let max = try! store.db.scalar(store.todos.select(store.order.max)) {
+                currentTask.order = max;
+            } else {
+                currentTask.order = store.count(store.todos) - 1
+            }
             let id = try store.add(task: currentTask)
             print("Success! New Task ID => \(id)")
         } catch let error {

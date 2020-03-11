@@ -65,27 +65,48 @@ class TodoViewController : UITableViewController {
             let modal = segue.destination as! DebugViewController;
             
             if let button = sender as? UIButton {
-                if let cell = button.superview as? ItemTableViewCell {
-                    let indexPath = tableView.indexPath(for: cell)!;
-                    
-                    let task = self.store.get(order: indexPath.row)
-                    if let tasks = task.decode(db: store.db) {
-                        let task = tasks[0];
-                        modal.idLabel.text = String(task.id)
-                        modal.titleLabel.text = task.title
-                        modal.detailsLabel.text = task.details
-                        let df = DateFormatter()
-                        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-                        if let ds = task.due {
-                            modal.dueLabel.text = df.string(from: ds)
-                        } else {
-                            modal.dueLabel.text = "No due date"
+                if let cell_content = button.superview, let cell = cell_content.superview as? ItemTableViewCell {
+                    if let indexPath = tableView.indexPath(for: cell) {
+                        print("Debugging row #\(indexPath.row)")
+                        if let tasks = self.store.get(order: indexPath.row).decode(db: store.db) {
+                            store.db.trace { print($0) }
+                            let task = tasks[0];
+                            modal.idLabel.text = "\(task.id)"
+                            modal.titleLabel.text = task.title
+                            modal.detailsLabel.text = task.details
+                            let df = DateFormatter()
+                            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+                            if let ds = task.due {
+                                modal.dueLabel.text = df.string(from: ds)
+                            } else {
+                                modal.dueLabel.text = "No due date"
+                            }
+                            modal.tagsLabel.text = task.tags
+                            modal.orderLabel.text = String(task.order)
+                            modal.areaLabel.text = task.area
+                        } else if let tasks = self.store.get(cell.task.id).decode(db: store.db) {
+                            let task = tasks[0];
+                            modal.idLabel.text = String(task.id)
+                            modal.titleLabel.text = task.title
+                            modal.detailsLabel.text = task.details
+                            let df = DateFormatter()
+                            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+                            if let ds = task.due {
+                                modal.dueLabel.text = df.string(from: ds)
+                            } else {
+                                modal.dueLabel.text = "No due date"
+                            }
+                            modal.tagsLabel.text = task.tags
+                            modal.orderLabel.text = String(task.order)
+                            modal.areaLabel.text = task.area
                         }
-                        modal.tagsLabel.text = task.tags
-                        modal.orderLabel.text = String(task.order)
-                        modal.areaLabel.text = task.area
                     }
+                    
+                } else {
+                    print("Cell broke!")
                 }
+                
+                debugPrint(sender.debugDescription)
             }
         // MARK: - 🤷‍♂️ -
         } else {
