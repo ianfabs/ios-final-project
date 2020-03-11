@@ -21,12 +21,6 @@ class TaskStore {
     let area = Expression<String>("area");
     let order = Expression<Int>("order");
     
-    var tasks: [Task] {
-        get {
-            return todos.decode(db: self.db)
-        }
-    }
-    
     init() {
         let path = NSSearchPathForDirectoriesInDomains(
             .documentDirectory, .userDomainMask, true
@@ -122,16 +116,19 @@ class TaskStore {
             )
             
             let temp_query = todos.filter(self.order == toSpot);
-            var temp: Task = temp_query.decode(db: db)[0];
+            if let temps = temp_query.decode(db: db) {
+                var temp = temps[0]
+                // Remove to spot
+                try db.run(temp_query.delete())
+                // First update from
+                try db.run(fromQ);
+                // Change the temp's spot to the from's spot
+                temp.order = fromSpot;
+                // Insert!
+                try db.run(todos.insert(temp));
+            }
             
-            // Remove to spot
-            try db.run(temp_query.delete())
-            // First update from
-            try db.run(fromQ);
-            // Change the temp's spot to the from's spot
-            temp.order = fromSpot;
-            // Insert!
-            try db.run(todos.insert(temp));
+            
         }
     }
     
@@ -145,17 +142,18 @@ class TaskStore {
             let source = todos.filter(self.order == fromSpot);
             let target = todos.filter(self.order == toSpot)
             
-            var stemp: Task = source.decode(db: db)[0];
-            var ttemp: Task = target.decode(db: db)[0]
-            
-            try db.run(source.delete())
-            try db.run(target.delete())
-            
-            stemp.order = toSpot
-            ttemp.order = fromSpot
-            
-            try db.run(todos.insert(stemp));
-            try db.run(todos.insert(ttemp));
+            if let stemps = source.decode(db: db), let ttemps = target.decode(db: db){
+                var stemp = stemps[0], ttemp = ttemps[0];
+                
+                try db.run(source.delete())
+                try db.run(target.delete())
+                
+                stemp.order = toSpot
+                ttemp.order = fromSpot
+                
+                try db.run(todos.insert(stemp));
+                try db.run(todos.insert(ttemp));
+            }
         }
     }
     
@@ -168,22 +166,61 @@ class TaskStore {
                 let source = table.filter(self.order == fromSpot);
 //                let target = table.filter(self.order == toSpot);
                 
-                var temp_source: Task = source.decode(db: db)[0];
-                temp_source.order = toSpot;
-                try db.run(source.delete())
-                if fromSpot > toSpot {
-                    try db.run(table.filter(self.order >= toSpot).update(self.order += 1));
+                if let temp_sources = source.decode(db: db) {
+                    var temp_source = temp_sources[0];
+                    temp_source.order = toSpot;
+                    
+                    try db.run(source.delete())
+                    if fromSpot > toSpot {
+                        try db.run(table.filter(self.order >= toSpot).update(self.order += 1));
+                    } else {
+                        try db.run(table.filter(self.order <= toSpot).update(self.order -= 1));
+                    }
+                    /// This line needs to use the *todos* table because it can't have a filter
+                    try db.run(todos.insert(temp_source))
+                    
+                    if (try db.scalar(table.filter(self.order < 0).count) as Int) > 0 {
+                        try db.run(table.update(self.order += 1));
+                    }
                 } else {
-                    try db.run(table.filter(self.order <= toSpot).update(self.order -= 1));
-                }
-                try db.run(table.insert(temp_source))
-                
-                if (try db.scalar(table.filter(self.order < 0).count) as Int) > 0 {
-                    try db.run(table.update(self.order += 1));
+                    print("Oopsie 🤷‍♂️")
                 }
             }
             
             return
+        }
+    }
+    
+    func balance() {
+        let todo = todos.filter(self.area == Area.todo.rawValue);
+        let in_progress = todos.filter(self.area == Area.in_progress.rawValue);
+        let done = todos.filter(self.area == Area.done.rawValue);
+        
+        fix_incremental_order(table: todo)
+        fix_incremental_order(table: in_progress)
+        fix_incremental_order(table: done)
+    }
+    
+    func fix_incremental_order(table t: Table) {
+        if let tasks = t.order(self.order.asc).decode(db: db) {
+            /// I know this is a shit solution, but I'm not *Kyle Gray*
+            /// what did you expect? O(1)? lamo
+            if tasks.count < 1 {
+                return
+            } else {
+                let fn = 0, ln = tasks.count
+                for i in fn..<ln {
+                    if i != tasks[i].order {
+                        try! db.run(
+                            t.filter(self.id == tasks[i].id).update(
+                                self.order <- i
+                            )
+                        )
+                    }
+                    
+                }
+                return
+            }
         }
     }
     
@@ -221,8 +258,8 @@ class TaskStore {
 // let tasksInProgress = store.get(area: .in_progress).decode();
 // ```
 extension Table {
-    func decode(db: Connection) -> [Task] {
-        return try! db.prepare(self).map{ row in
+    func decode(db: Connection) -> Optional<[Task]> {
+        return try? db.prepare(self).map{ row in
             return try row.decode()
         }
     }
@@ -246,8 +283,8 @@ struct Task: Codable {
     var order: Int
     
     init(id: Int,title: String, details: String, area: Area, due: Date? = nil, tags: String = "", order: Int) {
-        self.title = title
-        self.details = details
+        self.title = title.encode()
+        self.details = details.encode()
         self.area = area.rawValue
         self.due = due
         self.id = id;
@@ -298,4 +335,16 @@ class OTask: Codable {
 //    func as_task() -> Task {
 //        return Task(id: id!, title: title, details: details, area: "todo")
 //    }
+}
+
+extension String {
+    func decode() -> String? {
+        let data = self.data(using: .utf8)!
+        return String(data: data, encoding: .nonLossyASCII)
+    }
+    
+    func encode() -> String {
+        let data = self.data(using: .nonLossyASCII, allowLossyConversion: true)!
+        return String(data: data, encoding: .utf8)!
+    }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37499B9E24192CA100C66E12 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37499B9D24192CA100C66E12 /* TaskViewController.swift */; };
 		37810FA42414298400249A1B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FA32414298400249A1B /* AppDelegate.swift */; };
 		37810FA62414298400249A1B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FA52414298400249A1B /* SceneDelegate.swift */; };
 		37810FA82414298400249A1B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FA72414298400249A1B /* ViewController.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		37499B9D24192CA100C66E12 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		37810FA02414298400249A1B /* dad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37810FA32414298400249A1B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		37810FA52414298400249A1B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 		37810FA22414298400249A1B /* dad */ = {
 			isa = PBXGroup;
 			children = (
+				37499B9D24192CA100C66E12 /* TaskViewController.swift */,
 				37810FE024144A1D00249A1B /* ItemSubViewControllers */,
 				37810FA32414298400249A1B /* AppDelegate.swift */,
 				37810FA52414298400249A1B /* SceneDelegate.swift */,
@@ -315,6 +318,7 @@
 				37E788C32415B7B400B289AA /* TaskStore.swift in Sources */,
 				37810FE424144FE700249A1B /* TagsStackView.swift in Sources */,
 				37810FA82414298400249A1B /* ViewController.swift in Sources */,
+				37499B9E24192CA100C66E12 /* TaskViewController.swift in Sources */,
 				37810FE62414754E00249A1B /* TaskEditorViewController.swift in Sources */,
 				37810FA42414298400249A1B /* AppDelegate.swift in Sources */,
 				37810FDF2414471300249A1B /* ItemTableViewCell.swift in Sources */,

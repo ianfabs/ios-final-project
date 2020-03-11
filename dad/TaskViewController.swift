@@ -1,5 +1,5 @@
 //
-//  TodoViewController.swift
+//  TaskViewController.swift
 //  dad
 //
 //  Created by Fabricatore, Ian T on 3/7/20.
@@ -9,11 +9,20 @@
 import UIKit
 import SQLite
 
-class TodoViewController : UITableViewController {
+class TaskViewController : UITableViewController {
     var store = TaskStore();
     var table: Table {
         get {
-            return store.get(.todo)
+            switch self.title {
+                case "Todo":
+                    return store.get(.todo)
+                case "In Progress":
+                    return store.get(.in_progress)
+                case "Done":
+                    return store.get(.done)
+                default:
+                    return store.get(.todo)
+            }
         }
     }
     var tasks: [Task] {
@@ -39,25 +48,27 @@ class TodoViewController : UITableViewController {
         backItem.title = "Cancel"
         backItem.tintColor = .red
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backItem
-
-        if segue.identifier == "EditorSegue" {
-            print("Updating")
-            let editorVC = segue.destination as! TaskEditorViewController;
-            
-            if let selectedTaskCell = sender as? ItemTableViewCell {
-                let indexPath = tableView.indexPath(for: selectedTaskCell)!;
-                let selectedTask = self.tasks[indexPath.row];
-                editorVC.task = selectedTask;
-                editorVC.store = self.store;
-            } else {
-                print("No cell selected!")
+        
+        if let sid = segue.identifier {
+            if sid == "EditorSegue" {
+                let editorVC = segue.destination as! TaskEditorViewController;
+                editorVC.type = .update
+                if let selectedTaskCell = sender as? ItemTableViewCell {
+                    let indexPath = tableView.indexPath(for: selectedTaskCell)!;
+                    // MARK: This might break in the future
+                    let selectedTask = self.tasks[indexPath.row];
+                    editorVC.task = selectedTask;
+                    editorVC.store = self.store;
+                }
+                
+            } else if sid == "NewTask" {
+                let editorVC = segue.destination as! TaskEditorViewController;
+                editorVC.type = .create
+                editorVC.store = self.store
             }
-        } else if segue.identifier == "NewTask" {
-            print("Creating new task")
-            let editorVC = segue.destination as! TaskEditorViewController;
-            editorVC.type = .create
-            editorVC.store = self.store
         }
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,26 +101,26 @@ class TodoViewController : UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ItemTableViewCell  else {
             fatalError("The dequeued cell is not an instance of \(cellIdentifier).")
         }
-        // Get corresponding item
-        if let items = self.table.filter(store.order == indexPath.row).decode(db: store.db) {
-            var item = items[0]
-            cell.id = item.id;
-            cell.order = item.order;
-            
-            // Set values for cell
-            cell.TitleLabel.text = item.title.decode();
-            //        cell.TagsLabel.text = item.tags;
-            cell.DetailsLabel.text = item.details.decode();
-            let formatter = DateFormatter();
-            // initially set the format based on your datepicker date / server String
-            formatter.dateFormat = "🗓 MMMM dd, yyyy ⏰ HH:mm a";
-            if (item.due == nil) {
-                cell.DueByLabel.text = "No due date";
-            } else {
-                cell.DueByLabel.text = formatter.string(from: item.due!);
-            }
-        }
         
+        // Get corresponding item
+        let item = tasks.filter { (t) -> Bool in
+            return t.order == indexPath.row
+        }[0];
+        cell.id = item.id;
+        cell.order = item.order;
+        
+        // Set values for cell
+        cell.TitleLabel.text = item.title.decode();
+//        cell.TagsLabel.text = item.tags.decode();
+        cell.DetailsLabel.text = item.details.decode();
+        let formatter = DateFormatter();
+        // initially set the format based on your datepicker date / server String
+        formatter.dateFormat = "🗓 MMMM dd, yyyy ⏰ HH:mm a";
+        if (item.due == nil) {
+            cell.DueByLabel.text = "No due date";
+        } else {
+            cell.DueByLabel.text = formatter.string(from: item.due!);
+        }
         
         return cell
     }

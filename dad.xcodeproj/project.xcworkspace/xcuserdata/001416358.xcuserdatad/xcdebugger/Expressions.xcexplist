@@ -3,7 +3,39 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "TodoViewController.prepare(for:sender:):TodoViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(self.view as UITableView).isEditing">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TaskEditorViewController.type.getter:TaskEditorViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.type">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TaskEditorViewController.newTask():TaskEditorViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.currentTask">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "TodoViewController.enableEditingTaskList(_:forEvent:):TodoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TodoViewController.tableView(_:commit:forRowAt:):TodoViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexPath.row == deletedTask.order">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "TaskEditorViewController.currentTask.getter:TaskEditorViewController.swift">
@@ -13,48 +45,6 @@
             </PersistentString>
             <PersistentString
                value = "self.dueInput.date">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "TodoViewController.loadTasks():TodoViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "TodoViewController.viewWillAppear(_:):TodoViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "TaskEditorViewController.newTask():TaskEditorViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.titleInput.text">
-            </PersistentString>
-            <PersistentString
-               value = "self.currentTask">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "TodoViewController.prepare(for:sender:):TodoViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "button.superview as UIView">
-            </PersistentString>
-            <PersistentString
-               value = "(UITableViewCellContentView)$R22">
-            </PersistentString>
-            <PersistentString
-               value = "(self.view as UITableView).isEditing">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "TodoViewController.tableView(_:moveRowAt:to:):TodoViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "destinationIndexPath.row">
-            </PersistentString>
-            <PersistentString
-               value = "sourceIndexPath.row">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -73,15 +63,13 @@
          contextName = "TaskEditorViewController.type.setter:TaskEditorViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "TodoViewController.tableView(_:cellForRowAt:):TodoViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "indexPath.row">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "TaskStore.remove(id:):TaskStore.swift">
       </ContextState>
       <ContextState
-         contextName = "DebugViewController.idLabel.getter:DebugViewController.swift">
+         contextName = "TodoViewController.loadTasks():TodoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TodoViewController.viewWillAppear(_:):TodoViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

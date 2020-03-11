@@ -18,18 +18,21 @@ class TaskEditorViewController: UIViewController {
     @IBOutlet weak var newTagInput: UITextField!
     @IBOutlet weak var tagCollection: UICollectionView!
     
+    @IBOutlet weak var dateToggle: UISwitch!
+    
+    
     var store: TaskStore!
     var task: Task?
-    var type: EditorType = .update;
+    var type: EditorType! = .update;
     
     var currentTask : OTask {
         get {
             return OTask(
-                title: titleInput.text!,
-                details: detailsInput.text!,
+                title: titleInput.text!.encode(),
+                details: detailsInput.text!.encode(),
                 area: statusInput!.value,
-                due: dueInput.date,
-                order: store.tasks.count
+                due: dateToggle.isOn && dueInput.isEnabled ? dueInput.date : nil,
+                order: try! task?.order ?? store.db.scalar(store.get(statusInput.value).count)
             )
         }
     }
@@ -44,10 +47,7 @@ class TaskEditorViewController: UIViewController {
     }
     
     @IBOutlet weak var saveBtn: UIBarButtonItem!
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder);
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -57,10 +57,15 @@ class TaskEditorViewController: UIViewController {
         detailsInput.layer.cornerRadius = 5;
         
         if let task = task {
-            titleInput.text = task.title;
-            detailsInput.text = task.details;
+            titleInput.text = task.title.decode();
+            detailsInput.text = task.details.decode();
             if let due = task.due {
+                dateToggle.isOn = true
+                dueInput.isEnabled = true
                 dueInput.date = due;
+            } else {
+                dateToggle.isOn = false
+                dueInput.isEnabled = false
             }
             statusInput.value = Area(rawValue: task.area)!;
         }
@@ -92,13 +97,23 @@ class TaskEditorViewController: UIViewController {
         } else if type == .create {
             if self.areInputsValid {
                 newTask();
+            } else {
+                print("You suck 🤠")
             }
+        } else {
+            print("get fucked kid")
         }
+        // store.balance();
         self.navigationController?.popViewController(animated: true)
     }
     
     func newTask() {
         do {
+            print(currentTask.title)
+            print(currentTask.details)
+            print(currentTask.due ?? nil)
+            print(currentTask.area)
+            print(currentTask.order)
             let id = try store.add(task: currentTask)
             print("Success! New Task ID => \(id)")
         } catch let error {
@@ -108,12 +123,24 @@ class TaskEditorViewController: UIViewController {
     
     func updateTask(_ id: Int) {
         do {
+            print(task!.id)
+            print(titleInput.text!)
+            print(detailsInput.text!)
+            print(dueInput.date)
+            print(task!.order)
+            print(statusInput.value.rawValue)
+            currentTask.order = task!.order
             try store.db.run(
-                store.get(task!.id).update(currentTask)
+                store.todos.filter(store.id == task!.id).update(currentTask)
             );
+            
         } catch let error {
             print(error.localizedDescription);
         }
+    }
+    
+    @IBAction func toggleDate(_ sender: UISwitch, forEvent event: UIEvent) {
+        self.dueInput.isEnabled = sender.isOn
     }
 }
 
@@ -144,6 +171,7 @@ class UIStatusControl : UISegmentedControl {
             }
         }
     }
+    
 }
 
 enum EditorType {
