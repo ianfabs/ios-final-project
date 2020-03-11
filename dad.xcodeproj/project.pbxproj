@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37499B9A2418ACB700C66E12 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37499B992418ACB700C66E12 /* DebugViewController.swift */; };
+		37499B9C2418B86600C66E12 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37499B9B2418B86600C66E12 /* Errors.swift */; };
 		37810FA42414298400249A1B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FA32414298400249A1B /* AppDelegate.swift */; };
 		37810FA62414298400249A1B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FA52414298400249A1B /* SceneDelegate.swift */; };
 		37810FA82414298400249A1B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37810FA72414298400249A1B /* ViewController.swift */; };
@@ -46,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		37499B992418ACB700C66E12 /* DebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
+		37499B9B2418B86600C66E12 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		37810FA02414298400249A1B /* dad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37810FA32414298400249A1B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		37810FA52414298400249A1B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +102,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		37499B962418A71600C66E12 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				37499B992418ACB700C66E12 /* DebugViewController.swift */,
+				37499B9B2418B86600C66E12 /* Errors.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		37810F972414298400249A1B = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +134,7 @@
 		37810FA22414298400249A1B /* dad */ = {
 			isa = PBXGroup;
 			children = (
+				37499B962418A71600C66E12 /* Helpers */,
 				37810FE024144A1D00249A1B /* ItemSubViewControllers */,
 				37810FA32414298400249A1B /* AppDelegate.swift */,
 				37810FA52414298400249A1B /* SceneDelegate.swift */,
@@ -316,6 +330,8 @@
 				37810FE424144FE700249A1B /* TagsStackView.swift in Sources */,
 				37810FA82414298400249A1B /* ViewController.swift in Sources */,
 				37810FE62414754E00249A1B /* TaskEditorViewController.swift in Sources */,
+				37499B9A2418ACB700C66E12 /* DebugViewController.swift in Sources */,
+				37499B9C2418B86600C66E12 /* Errors.swift in Sources */,
 				37810FA42414298400249A1B /* AppDelegate.swift in Sources */,
 				37810FDF2414471300249A1B /* ItemTableViewCell.swift in Sources */,
 				37810FA62414298400249A1B /* SceneDelegate.swift in Sources */,
@@ -494,6 +510,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JJY8G683B4;
 				INFOPLIST_FILE = dad/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -511,6 +528,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JJY8G683B4;
 				INFOPLIST_FILE = dad/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

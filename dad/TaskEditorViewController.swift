@@ -29,7 +29,7 @@ class TaskEditorViewController: UIViewController {
                 details: detailsInput.text!,
                 area: statusInput!.value,
                 due: dueInput.date,
-                order: store.tasks.count
+                order: try! store.db.scalar(store.todos.select(store.order.max))!
             )
         }
     }

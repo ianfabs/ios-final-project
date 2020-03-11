@@ -33,6 +33,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ItemTableViewCell.awakeFromNib():ItemTableViewCell.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.TitleLabel.text">
+            </PersistentString>
+            <PersistentString
+               value = "self.task">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "TaskEditorViewController.type.setter:TaskEditorViewController.swift">
       </ContextState>
       <ContextState

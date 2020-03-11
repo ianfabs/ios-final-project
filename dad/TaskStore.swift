@@ -21,12 +21,6 @@ class TaskStore {
     let area = Expression<String>("area");
     let order = Expression<Int>("order");
     
-    var tasks: [Task] {
-        get {
-            return todos.decode(db: self.db)
-        }
-    }
-    
     init() {
         let path = NSSearchPathForDirectoriesInDomains(
             .documentDirectory, .userDomainMask, true
@@ -86,6 +80,10 @@ class TaskStore {
         return self.todos.filter(self.id == id)
     }
     
+    func get(order: Int) -> Table {
+        return self.todos.filter(self.order == order)
+    }
+    
     func get(area: Area) -> Table {
         return self.todos.filter(self.area == area.rawValue)
     }
@@ -94,10 +92,20 @@ class TaskStore {
         return self.todos.filter(self.area == area.rawValue)
     }
     
+    @discardableResult
     func update(task: Task) -> Int {
         return try! db.run(
             todos.filter(self.id == task.id).update(task)
         )
+    }
+    
+    func reorder() {
+//        return try! db.run(
+//            todos.update(self.order <- self.order.bindings[0].)
+//        )
+        let q = todos.update(self.order -= 1);
+        let r = try! db.run(q);
+        print("Rows affected by reorder => \(r)")
     }
     
     func remove(id: Int) throws {
@@ -105,9 +113,18 @@ class TaskStore {
     }
     
     func remove(order: Int) throws {
-        try self.db.run(self.todos.filter(self.order == order).delete());
+        try self.db.run(get(order: order).delete());
     }
     
+    func count(_ q: Table) -> Int {
+        return try! db.scalar(q.count);
+    }
+    
+    // MARK: move function
+    /// Function for handling reorder of items; currently fucking broken 😡
+    /// - Parameters:
+    ///   - from: The order number of the task being moved
+    ///   - to: The order number of where the task should end up
     func move(from: Int, to: Int) {
         if from == to {
             return
@@ -116,12 +133,9 @@ class TaskStore {
         print("From: \(from)");
         print("To: \(to)")
         print("-------------------------------------------------- \n")
-        var movedTask = self.tasks.filter { (t) -> Bool in
-            return t.order == from
-        }[0];
-        var destTask = self.tasks.filter { (t) -> Bool in
-            return t.order == to
-        }[0];
+        
+        var movedTask = get(order: from).decode(db: db).unsafelyUnwrapped[0]
+        var destTask = get(order: to).decode(db: db).unsafelyUnwrapped[0]
         
         print("-----Order Before---------------------------------")
         print("From: \(movedTask.order)");
@@ -129,14 +143,15 @@ class TaskStore {
         print("-------------------------------------------------- \n")
         
         movedTask.order = to;
-        destTask.order = from;
+        // If this doesn't work, remove plus one
+        destTask.order = from+1;
         
         let from2 = update(task: movedTask);
         let to2 = update(task: destTask)
         
         print("-----Order After---------------------------------")
-        print("From: \(get(movedTask.id).decode(db: db)[0].order)");
-        print("To: \(get(movedTask.id).decode(db: db)[0].order)")
+        print("From: \(get(movedTask.id).decode(db: db).unsafelyUnwrapped[0].order)");
+        print("To: \(get(movedTask.id).decode(db: db).unsafelyUnwrapped[0].order)")
         print("-------------------------------------------------- \n")
     }
 }
@@ -148,10 +163,17 @@ class TaskStore {
 // let tasksInProgress = store.get(area: .in_progress).decode();
 // ```
 extension Table {
-    func decode(db: Connection) -> [Task] {
-        return try! db.prepare(self).map{ row in
-            return try row.decode()
+    func decode(db: Connection) -> Optional<[Task]> {
+        do {
+            return Optional.some(try db.prepare(self).map{ row in
+                return try row.decode()
+            })
+        } catch {
+            return Optional.none
         }
+    }
+    func sort(_ by: Expressible) -> Table {
+        return self.order(by)
     }
 }
 

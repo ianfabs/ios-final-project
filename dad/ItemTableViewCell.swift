@@ -10,16 +10,29 @@ import UIKit
 
 class ItemTableViewCell: UITableViewCell {
 
-    var id: Int!;
     @IBOutlet weak var TitleLabel: UILabel!
     @IBOutlet weak var DetailsLabel: UILabel!
     @IBOutlet weak var DueByLabel: UILabel!
-//    @IBOutlet weak var TagsLabel: UILabel!
+    var task: Task! {
+        didSet {
+            TitleLabel.text = task.title
+            DetailsLabel.text = task.details
+            let fmt = DateFormatter();
+            fmt.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            if let due = task.due {
+                DueByLabel.text = fmt.string(from: due)
+            } else {
+                DueByLabel.text = "No due date"
+            }
+        }
+    }
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.showsReorderControl = true
+        self.showsReorderControl = true;
     }
-
+    
 }
