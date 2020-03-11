@@ -135,6 +135,58 @@ class TaskStore {
         }
     }
     
+    func swap(fromSpot: Int, toSpot: Int) throws {
+        if fromSpot == toSpot {
+            return
+        }
+        print("Move element at position \(fromSpot) to position \(toSpot)")
+        
+        try db.transaction {
+            let source = todos.filter(self.order == fromSpot);
+            let target = todos.filter(self.order == toSpot)
+            
+            var stemp: Task = source.decode(db: db)[0];
+            var ttemp: Task = target.decode(db: db)[0]
+            
+            try db.run(source.delete())
+            try db.run(target.delete())
+            
+            stemp.order = toSpot
+            ttemp.order = fromSpot
+            
+            try db.run(todos.insert(stemp));
+            try db.run(todos.insert(ttemp));
+        }
+    }
+    
+    func push(fromSpot: Int, toSpot: Int, area: Area = .todo) throws {
+        let table = todos.filter(self.area == area.rawValue);
+        if fromSpot == toSpot {
+            return
+        } else {
+            try db.transaction {
+                let source = table.filter(self.order == fromSpot);
+//                let target = table.filter(self.order == toSpot);
+                
+                var temp_source: Task = source.decode(db: db)[0];
+                temp_source.order = toSpot;
+                try db.run(source.delete())
+                if fromSpot > toSpot {
+                    try db.run(table.filter(self.order >= toSpot).update(self.order += 1));
+                } else {
+                    try db.run(table.filter(self.order <= toSpot).update(self.order -= 1));
+                }
+                try db.run(table.insert(temp_source))
+                
+                if (try db.scalar(table.filter(self.order < 0).count) as Int) > 0 {
+                    try db.run(table.update(self.order += 1));
+                }
+            }
+            
+            return
+        }
+    }
+    
     /// Reorders tasks by decrementing their order by one, intended to repair order **AFTER** deletion of element at order 0
     func reorder() -> Int {
 //        let tasks = todos.decode(db: db);

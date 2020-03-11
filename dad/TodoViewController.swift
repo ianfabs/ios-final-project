@@ -135,10 +135,10 @@ class TodoViewController : UITableViewController {
                             moveRowAt sourceIndexPath: IndexPath,
                             to destinationIndexPath: IndexPath) {
         // Update the model
-        tableView.reloadData()
         tableView.beginUpdates();
-        try! store.move(fromSpot: sourceIndexPath.row, toSpot: destinationIndexPath.row)
+        try! store.push(fromSpot: sourceIndexPath.row, toSpot: destinationIndexPath.row)
         tableView.endUpdates()
+        tableView.reloadData()
     }
     
 //    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
