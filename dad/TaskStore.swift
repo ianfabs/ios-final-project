@@ -101,43 +101,64 @@ class TaskStore {
     }
     
     func remove(id: Int) throws {
-        try self.db.run(self.todos.filter(self.id == id).delete());
+        let query = self.todos.filter(self.id == id).delete();
+        print(query.template)
+        let result = try? self.db.run(query);
     }
     
     func remove(order: Int) throws {
         try self.db.run(self.todos.filter(self.order == order).delete());
     }
     
-    func move(from: Int, to: Int) {
-        if from == to {
+    func move(fromSpot: Int, toSpot: Int) throws {
+        if fromSpot == toSpot {
             return
         }
-        print("-----Inputs------------------------------------------")
-        print("From: \(from)");
-        print("To: \(to)")
-        print("-------------------------------------------------- \n")
-        var movedTask = self.tasks.filter { (t) -> Bool in
-            return t.order == from
-        }[0];
-        var destTask = self.tasks.filter { (t) -> Bool in
-            return t.order == to
-        }[0];
+        print("Move element at position \(fromSpot) to position \(toSpot)")
         
-        print("-----Order Before---------------------------------")
-        print("From: \(movedTask.order)");
-        print("To: \(destTask.order)")
-        print("-------------------------------------------------- \n")
-        
-        movedTask.order = to;
-        destTask.order = from;
-        
-        let from2 = update(task: movedTask);
-        let to2 = update(task: destTask)
-        
-        print("-----Order After---------------------------------")
-        print("From: \(get(movedTask.id).decode(db: db)[0].order)");
-        print("To: \(get(movedTask.id).decode(db: db)[0].order)")
-        print("-------------------------------------------------- \n")
+        try db.transaction {
+            let fromQ = todos.filter(self.order == fromSpot).update(
+                self.order <- toSpot
+            )
+            
+            let temp_query = todos.filter(self.order == toSpot);
+            var temp: Task = temp_query.decode(db: db)[0];
+            
+            // Remove to spot
+            try db.run(temp_query.delete())
+            // First update from
+            try db.run(fromQ);
+            // Change the temp's spot to the from's spot
+            temp.order = fromSpot;
+            // Insert!
+            try db.run(todos.insert(temp));
+        }
+    }
+    
+    /// Reorders tasks by decrementing their order by one, intended to repair order **AFTER** deletion of element at order 0
+    func reorder() -> Int {
+//        let tasks = todos.decode(db: db);
+        //        return try! db.run(
+        //            todos.update(self.order <- self.order.bindings[0].)
+        //        )
+        let q = todos.update(self.order -= 1);
+        let r = try! db.run(q);
+        /// Test Code
+//        let q: [Task] = tasks.map{ t in
+//            var x = t;
+//            x.order -= 1
+//            return x;
+//        }
+//        for t in q {
+//            print(t.order)
+//        }
+        return r;
+    }
+    
+    func reorder(_ table: Table =
+        Table("todos")) -> Int {
+        let q = table.update(self.order -= 1);
+        return try! db.run(q);
     }
 }
 

@@ -11,11 +11,14 @@ import SQLite
 
 class TodoViewController : UITableViewController {
     var store = TaskStore();
+    var table: Table {
+        get {
+            return store.get(.todo)
+        }
+    }
     var tasks: [Task] {
         get {
-            return store.tasks.sorted { (a, b) -> Bool in
-                return a.order > b.order;
-            }
+            return self.table.order(store.order).decode(db: store.db)
         }
     }
     
@@ -50,6 +53,11 @@ class TodoViewController : UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        let tasks = store.todos.decode(db: store.db);
+        print("ID", "|", "Order", "|", "Title")
+        for task in tasks {
+            print(task.id, " | ", "\(task.order+1)(\(task.order))", "  | ", task.title)
+        }
         let tableView = self.view as! UITableView;
         tableView.reloadData();
     }
@@ -82,8 +90,8 @@ class TodoViewController : UITableViewController {
             return t.order == indexPath.row
         }[0];
         cell.id = item.id;
-//        print("Table ID (\(indexPath.row)) SQL ID (\(item.id))")
-        print("Order ID (\(item.order))")
+        cell.order = item.order;
+        
         // Set values for cell
         cell.TitleLabel.text = item.title;
 //        cell.TagsLabel.text = item.tags;
@@ -103,9 +111,18 @@ class TodoViewController : UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let deletedTask = tableView.cellForRow(at: indexPath) as! ItemTableViewCell;
-            try! store.remove(id: deletedTask.id)
-            tableView.deselectRow(at: indexPath, animated: true)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            if indexPath.row == deletedTask.order {
+                try! store.remove(id: deletedTask.id)
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
+                if indexPath.row == 0 {
+                    let _ = store.reorder(table);
+                }
+            } else {
+                self.tableView.endEditing(true)
+            }
+
         }
         tableView.reloadData();
     }
@@ -118,25 +135,29 @@ class TodoViewController : UITableViewController {
                             moveRowAt sourceIndexPath: IndexPath,
                             to destinationIndexPath: IndexPath) {
         // Update the model
-        store.move(from: sourceIndexPath.row, to: destinationIndexPath.row)
         tableView.reloadData()
+        tableView.beginUpdates();
+        try! store.move(fromSpot: sourceIndexPath.row, toSpot: destinationIndexPath.row)
+        tableView.endUpdates()
     }
     
+//    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+//        tableView.reloadData()
+//    }
     
     @IBAction func enableEditingTaskList(_ sender: UIButton, forEvent event: UIEvent) {
         let on = UIImage.init(systemName: "rectangle.grid.1x2.fill", withConfiguration: toggleImageConfig);
         let off = UIImage.init(systemName: "rectangle.grid.1x2", withConfiguration: toggleImageConfig);
         
-        print("is editing => \(isEditing)")
-        if isEditing == true {
+        print("is editing => \(tableView.isEditing)")
+        if tableView.isEditing == true {
             toggle.setImage(off, for: .normal)
-            setEditing(false, animated: true)
+            tableView.setEditing(false, animated: true)
         } else {
             toggle.setImage(on, for: .normal)
-            setEditing(true, animated: true)
+            tableView.setEditing(true, animated: true)
         }
-        print("is editing => \(isEditing)")
-        tableView.reloadData();
+        print("is editing => \(tableView.isEditing)")
     }
     
 }

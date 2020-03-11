@@ -11,6 +11,7 @@ import UIKit
 class ItemTableViewCell: UITableViewCell {
 
     var id: Int!;
+    var order: Int!;
     @IBOutlet weak var TitleLabel: UILabel!
     @IBOutlet weak var DetailsLabel: UILabel!
     @IBOutlet weak var DueByLabel: UILabel!
